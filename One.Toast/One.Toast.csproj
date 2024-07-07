@@ -1,18 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-	  <PackageVersion>1.1.1</PackageVersion>
+	  <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+	  <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>	 
+	  <Authors>Mohamed OUBAICH</Authors>
+	  <Copyright>Copyright	2024 (c) Chris Sainty. All rights reserved.</Copyright> 	  
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <IncludeSymbols>true</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	  <!-- NuGet settings -->
+	  <PackageId>One.Toast</PackageId>
+	  <PackageTags>Blazor;Razor;Components;Toast;Popup;Notification;ASP.NET Core;CSharp;Web</PackageTags>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageProjectUrl>https://github.com/oubaichmed/OneToast</PackageProjectUrl>
 	  <PackageOutputPath>D:\NugetsPackage</PackageOutputPath>
 	  <ApplicationIcon>DONE.ico</ApplicationIcon>
- 	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <RepositoryType>git</RepositoryType>	  
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="DONE.ico" />
-	  <None Include="README.md" Pack="true" PackagePath="\"/>
+	  <None Include="../README.md" Pack="true" PackagePath="\" />
 
   </ItemGroup>
 
