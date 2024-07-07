@@ -5,7 +5,6 @@ It supports icons that are either specified by class name (such as fontawesome) 
 
 [![Nuget version](https://img.shields.io/nuget/v/One.Toast.svg?logo=nuget)](https://www.nuget.org/packages/One.Toast/)
 [![Nuget downloads](https://img.shields.io/nuget/dt/One.Toast?logo=nuget)](https://www.nuget.org/packages/One.Toast/)
-![Build & Test Main](https://github.com/oubaichmed/Toast/workflows/Build%20&%20Test%20Main/badge.svg)
 ![Screenshot of component in action](screenshot.png)
 
 ## Installing
