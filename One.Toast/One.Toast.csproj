@@ -7,7 +7,7 @@
 	  <PackageVersion>1.1.1</PackageVersion>
 	  <PackageOutputPath>D:\NugetsPackage</PackageOutputPath>
 	  <ApplicationIcon>DONE.ico</ApplicationIcon>
-	  <PackageReadmeFile>README.md</PackageReadmeFile>
+ 	  <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
