@@ -1,0 +1,128 @@
+﻿-child-container
+
+.one-toast {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    animation: fadein 1.5s;
+    margin-bottom: 1rem;
+    padding: 0;
+    padding: 1rem 1.25rem;
+    color: #1D1D1B;
+    border-color: #fff;
+    width: 20rem;
+    border-radius: 1.25rem;
+    box-shadow: rgba(0,0,0,0.30) 0px 10px 30px 2px;
+}
+
+.one-toast-component {
+    display: initial;
+    padding: 0 0 0 0;
+}
+
+.one-toast-info {
+    background-color: #2563fdb5;
+}
+
+.one-toast-success {
+    background-color: #16a34ab5;
+}
+
+.one-toast-warning {
+    background-color: #eab308b5;
+}
+
+.one-toast-error {
+    background-color: #dc2626b5;
+}
+
+.one-toast .one-toast-icon {
+    color: #fff;
+}
+/*.one-toast-info .one-toast-icon {
+    color: #2563eb;
+
+}
+
+.one-toast-success .one-toast-icon {
+    color: #16a34a;
+}
+
+.one-toast-warning .one-toast-icon {
+    color: #eab308;
+}
+
+.one-toast-error .one-toast-icon {
+    color: #dc2626;
+}*/
+
+.one-toast-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 0 1rem 0 0;
+    font-size: 1.5rem;
+}
+
+.one-toast .one-toast-message {
+    flex-grow: 1;
+    margin-bottom: 0;
+    font-weight: 500;
+    font-size: 0.875rem;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.one-toast .one-toast-close {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 0 0 0 1rem;
+    background-color: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    color: #fff /*#94a3b8*/;
+    font-size: 0.9rem;
+}
+
+    .one-toast .one-toast-close:hover {
+        /*color: inherit;*/
+    }
+
+.one-toast .one-toast-progressbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    border-bottom-left-radius: .375rem;
+    border-bottom-right-radius: .375rem;
+}
+
+    .one-toast .one-toast-progressbar > span {
+        position: absolute;
+        filter: brightness(75%);
+        height: 6px;
+        border-bottom-left-radius: .375rem;
+        background-image: linear-gradient(rgba(255, 255, 255, O.1) 255 255);
+        transition: all .1s linear;
+    }
+
+.one-toast-action {
+    cursor: pointer;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

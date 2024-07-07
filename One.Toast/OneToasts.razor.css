@@ -1,0 +1,47 @@
+﻿.one-toast-container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 1000001 !important;
+    height: auto !important;
+}
+one-toast-container::-webkit-scrollbar {
+    display: none;
+}
+
+.position-topleft {
+    top: 2rem;
+    left: 2rem;
+}
+
+.position-topright {
+    top: 2rem;
+    right: 2rem;
+}
+
+.position-topcenter {
+    top: 2rem;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.position-bottomleft {
+    bottom: 2rem;
+    left: 2rem;
+}
+
+.position-bottomright {
+    bottom: 2rem;
+    right: 2rem;
+}
+
+.position-bottomcenter {
+    bottom: 2rem;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.one-toast {
+    width: 30rem;
+    border-radius: .25rem;
+}

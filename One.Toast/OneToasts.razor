@@ -1,0 +1,29 @@
+﻿ @if (ToastList.Any())
+{
+    @foreach (var positionGroupedToasts in ToastList.GroupBy(x => x.NotificationSettings.PositionClass))
+    {
+        <div class="one-toast-container @positionGroupedToasts.Key" @key="positionGroupedToasts.Key">
+            <CascadingValue Value=this IsFixed="true">
+                @foreach (var toast in positionGroupedToasts!.OrderBy(x => x.TimeStamp))
+                {
+                    if (toast.CustomComponent is not null)
+                    {
+                        <Toast @key="toast" ToastId="toast.Id" Settings="toast.NotificationSettings">
+                            @toast.CustomComponent
+                        </Toast>
+                    }
+                    else
+                    {
+                        <Toast @key="toast"
+                                       ToastId="toast.Id"
+                                       Message="toast.Message"
+                                       Level="toast.Level"
+                                       Settings="toast.NotificationSettings">
+                        </Toast>
+
+                    }
+                }
+            </CascadingValue>
+        </div>
+    }
+}
