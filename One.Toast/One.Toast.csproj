@@ -11,17 +11,26 @@
 	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	  <!-- NuGet settings -->
 	  <PackageId>One.Toast</PackageId>
+	  <PackageVersion>1.1.2</PackageVersion>
+
 	  <PackageTags>Blazor;Razor;Components;Toast;Popup;Notification;ASP.NET Core;CSharp;Web</PackageTags>
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <PackageProjectUrl>https://github.com/oubaichmed/OneToast</PackageProjectUrl>
 	  <PackageOutputPath>D:\NugetsPackage</PackageOutputPath>
 	  <ApplicationIcon>DONE.ico</ApplicationIcon>
-	  <RepositoryType>git</RepositoryType>	  
+	  <RepositoryType>git</RepositoryType>
+	  <PackageIcon>DONE.png</PackageIcon>
+	  <RepositoryUrl>https://github.com/oubaichmed/OneToast</RepositoryUrl>	  
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="DONE.ico" />
-	  <None Include="../README.md" Pack="true" PackagePath="\" />
+	  <None Include="..\README.md" Pack="true" PackagePath="\" />
+	  <None Include="../screenshot.png" Pack="true" PackagePath="\" />
+	  <None Include="..\DONE.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 
   </ItemGroup>
 
