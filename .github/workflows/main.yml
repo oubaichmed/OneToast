@@ -1,73 +1,87 @@
-name: Build & Publish NuGet to GitHub Registry
+name: Build & Test Main
 
 on:
   push:
-    branches: [master]
-      
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+env:
+    NETCORE_VERSION: '8.0.x'
+    OUTPUT_DIR: 'net8.0'
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+    DOTNET_CLI_TELEMETRY_OPTOUT: true
+    PROJECT_NAME: OneToast
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    NUGET_FEED: https://api.nuget.org/v3/index.json
+    NUGET_KEY: ${{ secrets.NUGET_KEY }}
+
 jobs:
   build:
-    runs-on: ubuntu-latest    
-    outputs: 
-      Version: ${{ steps.gitversion.outputs.SemVer }}
-      CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }} 
-
+    name: Build, test and pack
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0 #fetch-depth is needed for GitVersion
-        
-    #Install and calculate the new version with GitVersion  
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.10.2
-      with:
-        versionSpec: 5.x
-    - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v0.10.2
-      id: gitversion # step id used as reference for output values
-    - name: Display GitVersion outputs
-      run: |
-        echo "Version: ${{ steps.gitversion.outputs.SemVer }}"
-        echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }}"
-    
-# Build/pack the project
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.2.0
-      with:
-        dotnet-version: 7.0.x
- 
-    - name: Build and Pack NuGet package with versioning
-      run: dotnet pack ${{ vars.CS_PROJ_PATH }} -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
+    - name: Checkout
+      uses: actions/checkout@v2
 
-    - name: Upload NuGet package to GitHub
-      uses: actions/upload-artifact@v3.1.3
+    - name: Setup .NET Core ${{ env.NETCORE_VERSION }}
+      uses: actions/setup-dotnet@v1
       with:
-        name: nugetPackage
-        path: bin/Release/*.nupkg
+        dotnet-version: ${{ env.NETCORE_VERSION }}
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-  release:
-    runs-on: ubuntu-latest    
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build -c Release --no-restore src/oubaichmed.$PROJECT_NAME/oubaichmed.$PROJECT_NAME.csproj
+
+    - name: Build Test Extensions
+      run: dotnet build -c Release --no-restore src/oubaichmed.$PROJECT_NAME.TestExtensions/oubaichmed.$PROJECT_NAME.TestExtensions.csproj
+
+    - name: Test
+      run: dotnet test -c Release --no-restore --verbosity normal tests/oubaichmed.$PROJECT_NAME.Tests
+
+  deploy:
     needs: build
-    if: github.ref == 'refs/heads/master' # only run job if on the master branch   
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.NETCORE_VERSION }}
+
+      - name: Create Release NuGet package
+        run: |
+          arrTag=(${GITHUB_REF//\// })
+          VERSION="${arrTag[2]}"
+          echo Version: $VERSION
+          VERSION="${VERSION//v}"
+          echo Clean Version: $VERSION
+          dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg src/oubaichmed.$PROJECT_NAME/oubaichmed.$PROJECT_NAME.*proj
+          dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg src/oubaichmed.$PROJECT_NAME.TestExtensions/oubaichmed.$PROJECT_NAME.TestExtensions.csproj
+
+      - name: Push to NuGet Feed
+        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --api-key $NUGET_KEY --skip-duplicate
+
+      - name: Publish Sample Site
+        run: dotnet publish -c Release samples/BlazorWebAssembly/BlazorWebAssembly.csproj
+
+      - name: Rewrite base href
+        uses: SteveSandersonMS/ghaction-rewrite-base-href@v1
+        with:
+          html_path: samples/BlazorWebAssembly/bin/Release/${{ env.OUTPUT_DIR }}/publish/wwwroot/index.html
+          base_href: /${{ env.PROJECT_NAME }}/
     
-    steps: 
-    #Push NuGet package to GitHub packages
-    - name: Download nuget package artifact
-      uses: actions/download-artifact@v3.0.2
-      with:
-        name: nugetPackage
-        path: nugetPackage
-    - name: Prep packages
-      run: dotnet nuget add source --username ${{ vars.USERNAME }} --password ${{ secrets.NUGET_PACKAGE_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ vars.USERNAME }}/index.json"
-    - name: Push package to GitHub packages 
-      if: needs.build.outputs.CommitsSinceVersionSource > 0 #Only release if there has been a commit/version change  
-      run: dotnet nuget push nugetPackage/*.nupkg --api-key ${{ secrets.NUGET_PACKAGE_TOKEN }} --source "github"
-    
-    #Create release
-    - name: Create Release
-      if: needs.build.outputs.CommitsSinceVersionSource > 0 #Only release if there has been a commit/version change
-      uses: ncipollo/release-action@v1.13.0
-      with:
-        tag: ${{ needs.build.outputs.Version }}
-        name: Release ${{ needs.build.outputs.Version }}
-        artifacts: "nugetPackage/*"
-        token: ${{ secrets.NUGET_PACKAGE_TOKEN }}
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: $GITHUB_TOKEN
+          BASE_BRANCH: main # The branch the action should deploy from.
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: samples/BlazorWebAssembly/bin/Release/${{ env.OUTPUT_DIR }}/publish/wwwroot # The folder the action should deploy.
+          SINGLE_COMMIT: true
