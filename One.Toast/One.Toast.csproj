@@ -21,7 +21,8 @@
 	  <RepositoryType>git</RepositoryType>
 	  <PackageIcon>DONE.png</PackageIcon>
 	  <RepositoryUrl>https://github.com/oubaichmed/OneToast</RepositoryUrl>	  
-  </PropertyGroup>
+ 	<EnablePackageValidation>true</EnablePackageValidation>
+ </PropertyGroup>
 
   <ItemGroup>
     <Content Include="DONE.ico" />
@@ -33,7 +34,6 @@
 	  </None>
 
   </ItemGroup>
-
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
