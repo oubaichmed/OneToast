@@ -2,15 +2,16 @@
 @using One.Toast.Configuration
 @inherits LayoutComponentBase
 <OneToasts Position="ToastPosition.TopRight"
-           Timeout="10000"
-           IconType="IconType.Material"
-           ErrorIcon="error_outline"
-           InfoIcon="school"
-           SuccessIcon="done_outline"
-           WarningIcon="warning"
+           Timeout="100"
+           IconType="IconType.one"
+           ErrorIcon=""
+           InfoIcon=""
+           SuccessIcon=""
+           WarningIcon=""
            ShowProgressBar="@true"
            ShowCloseButton="@true"
-           MaxToastCount="3">
+           DisableTimeout="@false"
+           MaxToastCount="10">
     <CloseButtonContent>
         <div>
             <span class="myCloseButtonStyleClass">&times;</span>
